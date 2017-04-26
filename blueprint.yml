@@ -1,0 +1,152 @@
+blueprint-for-teamserver:
+    kind: blueprint
+    profiles:
+        post-build-tests:
+            environment-type: sandbox
+            cloud: kubernetes_dev
+            defaults:
+                deployment:
+                    template: low_end_requirements
+            services:
+                - team_server
+                - portal
+                - api_server
+
+        integration-tests:
+            environment_type: sandbox
+            cloud:
+                name: aws_testing
+                template: integratio_tests_cf.template
+            defaults:
+                deployment:
+                    template: mid-range-requirements
+            services:
+                - team_server:
+                    deployment:
+                        template: multi_node
+                - portal
+
+        perf-tests:
+            environment_type: sandbox
+            cloud:
+                name: aws_testing
+                template: integratio_tests_cf.template
+            defaults:
+                deployment:
+                    template: mid-range-requirements
+            services:
+                - team_server:
+                    deployment:
+                        template: multi_node
+                - portal
+
+        production:
+            cloud: aws_prod
+            environment_type: static_environment
+            defaults:
+                upgrade_strategy: blue-green
+            services:
+                - team_server
+                - portal
+                - api_server
+
+blueprint_for_teamserver_aws:
+    kind: blueprint
+    profiles:
+
+        post-build-tests:
+            deployment_targets:
+                - all_in_one_server:
+                    kind: new_deployment
+                    template: low_end_requirements
+            environment_type: sandbox
+            services:
+                - team_server:
+                    deployment: all_in_one_server
+                - portal:
+                    deployment: all_in_one_server
+                - api_server:
+                    deployment: all_in_one_server
+
+        integration-tests:
+            environment_type: sandbox
+            cloud_template:
+                aws: cloudformation.template
+            defaults:
+                deployment:
+                    template: high_end_requirements
+            services:
+                - team_server:
+                    deployment:
+                        template: multi_node
+                - portal
+                - api_server
+
+        production:
+            environment_type: static_environment
+            deployments:
+                - main_server_prod_deployment:
+                    kind: existing_deployment
+                    selector: main_server
+                - main_portal_prod_deployment:
+                    kind: existing_deployment
+                    selector: portal
+                - main_api_prod_deployment:
+                    kind: existing_deployment
+                    selector: api
+            defaults:
+                upgrade_strategy: in-place
+            services:
+                - team_server:
+                    deployment: main_server_prod_deployment
+                - portal:
+                    deployment: main_portal_prod_deployment
+                - api_server:
+                    deployment: main_api_prod_deployment
+
+    data:
+        - admin_database:
+            data_source: xx
+            data_version: yy
+        - server_database:
+            data_source: xx
+            data_version: yy
+----------
+default:
+    kind: infra_requirements
+
+
+low_end_requirements:
+    kind: deployment_template
+    minRam: 8192mb
+    minCores: 2
+    storage:
+        - mount: '/dsfd'
+          volume: volume1
+    volumes:
+        - name: volume1
+          minDisk: 100gb
+          minDiskType: ssd
+          persistentDisk: true
+          metadata:
+              selector: slow
+        - name: volume2
+
+----------
+
+
+team_server:
+    kind: service
+    deployment_defaults:
+        upgrade:
+            selector: [team_server]
+            strategy: [rolling, blue-green, custom, in-place]
+        new:
+            infra_requirements: default
+            image:
+                kubernetes: x
+                aws: y
+    configuration:
+        run_script: x.sh
+        playbook: ???
+        workflow: custom_workflow
