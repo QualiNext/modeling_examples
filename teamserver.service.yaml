@@ -1,9 +1,10 @@
 team_server:
     kind: service
+    network:
+        internal: [8028, 8029]
+        external: [8031]
     deployment_defaults:
-        strategy: rolling
-            selector: [team_server]
-            strategy: [rolling, blue-green, custom, in-place]
+        upgrade: rolling
         new:
             infra_requirements: default
             image:
@@ -11,5 +12,3 @@ team_server:
                 aws: y
     configuration:
         run_script: x.sh
-        playbook: ???
-        workflow: custom_workflow

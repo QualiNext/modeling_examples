@@ -3,7 +3,6 @@ blueprint-for-teamserver:
     profiles:
         post-build-tests:
             environment-type: sandbox
-            cloud: kubernetes_dev
             defaults:
                 deployment:
                     template: low_end_requirements
@@ -17,17 +16,21 @@ blueprint-for-teamserver:
             cloud:
                 name: aws_testing
                 template: integratio_tests_cf.template
-            defaults:
-                deployment:
-                    template: mid-range-requirements
             services:
                 - team_server:
                     deployment:
                         template: multi_node
                         aws_custom: 
+                            subnet: first
+                            role: main
+
+                - portal:
+                    deployment:
+                        template: multi_node
+                        aws_custom: 
                             subnet: second
                             role: main
-                - portal
+
 
         perf-tests:
             environment_type: sandbox
