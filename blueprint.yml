@@ -24,6 +24,9 @@ blueprint-for-teamserver:
                 - team_server:
                     deployment:
                         template: multi_node
+                        aws_custom: 
+                            subnet: second
+                            role: main
                 - portal
 
         perf-tests:
@@ -135,18 +138,4 @@ low_end_requirements:
 ----------
 
 
-team_server:
-    kind: service
-    deployment_defaults:
-        upgrade:
-            selector: [team_server]
-            strategy: [rolling, blue-green, custom, in-place]
-        new:
-            infra_requirements: default
-            image:
-                kubernetes: x
-                aws: y
-    configuration:
-        run_script: x.sh
-        playbook: ???
-        workflow: custom_workflow
+

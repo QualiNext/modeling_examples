@@ -1,0 +1,15 @@
+team_server:
+    kind: service
+    deployment_defaults:
+        strategy: rolling
+            selector: [team_server]
+            strategy: [rolling, blue-green, custom, in-place]
+        new:
+            infra_requirements: default
+            image:
+                kubernetes: x
+                aws: y
+    configuration:
+        run_script: x.sh
+        playbook: ???
+        workflow: custom_workflow
