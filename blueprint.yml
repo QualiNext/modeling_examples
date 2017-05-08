@@ -3,9 +3,9 @@ blueprint-for-teamserver:
     profiles:
         post-build-tests:
             environment-type: sandbox
+            cloud: kube_test
             defaults:
-                deployment:
-                    template: low_end_requirements
+                service.deployment.template: low_end_requirements
             services:
                 - team_server
                 - portal
@@ -21,16 +21,15 @@ blueprint-for-teamserver:
                     deployment:
                         template: multi_node
                         aws_custom: 
-                            subnet: first
-                            role: main
+                            AWS::EC2::Subnet: @network:first
+                            AWS::EC2::Role: @name:primary
 
                 - portal:
                     deployment:
                         template: multi_node
                         aws_custom: 
-                            subnet: second
-                            role: main
-
+                            AWS::EC2::Subnet: network@first
+                            AWS::EC2::Role: name@primary
 
         perf-tests:
             environment_type: sandbox
@@ -38,23 +37,14 @@ blueprint-for-teamserver:
                 name: aws_testing
                 template: integratio_tests_cf.template
             defaults:
-                deployment:
-                    template: mid-range-requirements
+                service.template: mid-range-requirements
             services:
                 - team_server:
                     deployment:
-                        template: multi_node
+                        template: 
+                            name: multi_node
+                            nodes: 5
                 - portal
-
-        production:
-            cloud: aws_prod
-            environment_type: static_environment
-            defaults:
-                upgrade_strategy: blue-green
-            services:
-                - team_server
-                - portal
-                - api_server
 
 blueprint_for_teamserver_aws:
     kind: blueprint
@@ -79,8 +69,8 @@ blueprint_for_teamserver_aws:
             cloud_template:
                 aws: cloudformation.template
             defaults:
-                deployment:
-                    template: high_end_requirements
+                service.template: high_end_requirements
+
             services:
                 - team_server:
                     deployment:
