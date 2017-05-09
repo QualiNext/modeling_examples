@@ -1,0 +1,431 @@
+{
+    "Outputs": {
+        "DevboxAPIAZ": {
+            "Description": "Availability Zone of devbox API instance",
+            "Value": {
+                "Fn::GetAtt": [
+                    "DevBoxAPIInstance",
+                    "AvailabilityZone"
+                ]
+            }
+        },
+        "DevboxAPIPublicIP": {
+            "Description": "Public IP address of devbox API instancemy_key_pair",
+            "Value": {
+                "Fn::GetAtt": [
+                    "DevBoxAPIInstance",
+                    "PublicIp"
+                ]
+            }
+        },
+		"DevboxSwaggerURL": {
+			"Description" : "Devbox API Swagger IP address",
+			"Value" : {
+				"Fn::Join": [
+                                "",
+								[   "http://",
+									{"Fn::GetAtt": [
+										"DevBoxAPIInstance",
+										"PublicIp"
+									]},
+									":",
+									{"Ref": "DevboxAPIPort"},
+                                    "/swagger/index.html"
+                                ]
+                            ]
+			}
+		}
+    },
+    "Parameters": {
+        "DevboxAPIImageId": {
+            "Default": "ami-4d3a2e29",
+            "Description": "AMI",
+            "Type": "String"
+        },
+        "DevboxAPIPort": {
+            "Default": "5050",
+            "Description": "TCP/IP port of the web server",
+            "Type": "String"
+        },
+        "InstanceType": {
+            "AllowedValues": [
+                "t2.micro",
+                "t2.small"
+            ],
+            "ConstraintDescription": "must be a valid EC2 instance type.",
+            "Default": "t2.micro",
+            "Description": "Devbox API EC2 instance type",
+            "Type": "String"
+        },
+        "KeyName": {
+            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance",
+            "Type": "AWS::EC2::KeyPair::KeyName",
+			"Default":"my_key_pair"
+        }
+    },
+    "Resources": {
+      "InstanceRole":{
+         "Type":"AWS::IAM::Role",
+         "Properties":{
+            "AssumeRolePolicyDocument":{
+               "Statement":[
+                  {
+                     "Effect":"Allow",
+                     "Principal":{
+                        "Service":[
+                           "ec2.amazonaws.com"
+                        ]
+                     },
+                     "Action":[
+                        "sts:AssumeRole"
+                     ]
+                  }
+               ]
+            },
+            "ManagedPolicyArns": [
+                "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role",
+                "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
+            ],
+            "Path":"/"
+         }
+      },
+      "RolePolicies":{
+         "Type":"AWS::IAM::Policy",
+         "Properties":{
+            "PolicyName":"S3Download",
+            "PolicyDocument":{
+               "Statement":[
+                  {
+                     "Action":[
+                        "s3:GetObject"
+                     ],
+                     "Effect":"Allow",
+                     "Resource":"arn:aws:s3:::ngdevbox/*"
+                  }
+               ]
+            },
+            "Roles":[
+               {
+                  "Ref":"InstanceRole"
+               }
+            ]
+         }
+      },
+        "DevBoxAPIInstance": {
+            "Metadata": {
+                "AWS::CloudFormation::Authentication": {
+                    "S3AccessCreds": {
+                        "type": "S3",
+						"buckets": [ "ngdevbox" ],
+                        "roleName": { "Ref" : "InstanceRole"}
+                    }
+                },
+                "AWS::CloudFormation::Init": {
+                    "configSets": {
+                        "testing": [
+                            "install"
+                        ]
+                    },
+                    "install": {
+                        "packages": {
+                            "apt": {
+                                "apache2": []
+                            }
+                        },
+						"files":{
+							"/quali/artifacts/devbox-server.tar.gz":{
+							   "source":"http://ngdevbox.s3.amazonaws.com/devbox-server.tar.gz",
+							   "authentication":"S3AccessCreds"
+							},
+							"/quali/artifacts/devbox-cloud-providers.tar.gz":{
+							   "source":"http://ngdevbox.s3.amazonaws.com/devbox-cloud-providers.tar.gz",
+							   "authentication":"S3AccessCreds"
+							},
+							"/etc/systemd/system/devbox.service" : {
+							      "content": { "Fn::Join" : ["", [
+								"[Unit]\n",
+								"Description=Devbox API Service\n",
+								"[Service]\n",
+								"WorkingDirectory=/quali/devbox/devbox-server\n",
+										"ExecStart=/usr/bin/dotnet /quali/devbox/devbox-server/Devbox.Api.dll\n",
+										"Restart=always\n",
+										"RestartSec=10\n",
+								"User=ubuntu\n",  
+								"Environment=ASPNETCORE_ENVIRONMENT=Production\n"
+							      ]]}
+							 }
+						 }
+					 }
+                }
+            }    
+            ,
+            "Properties": {
+                "IamInstanceProfile":{
+                    "Ref":"InstanceProfile"
+                },
+                "ImageId": {
+                    "Ref": "DevboxAPIImageId"
+                },
+                "InstanceType": {
+                    "Ref": "InstanceType"
+                },
+                "KeyName": {
+                    "Ref": "KeyName"
+                },
+                "SecurityGroupIds": [
+                    {
+                        "Ref": "SecurityGroup"
+                    }
+                ],
+                "SubnetId": {
+                    "Ref": "PublicSubnet"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "instance"
+                                ]
+                            ]
+                        }
+                    }
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash\n",
+                                "sudo apt-get update\n",
+                                "sudo apt-get -y install python-setuptools\n",
+                                "sudo apt-get -y install python-pip\n",
+								"sudo sh -c 'echo \"deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ xenial main\" > /etc/apt/sources.list.d/dotnetdev.list'\n",
+								"sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 417A0893\n",
+								"sudo apt-get -y update\n",
+								"sudo apt-get install -y python3-pip\n",
+								"sudo apt-get -y install dotnet-dev-1.0.3\n",
+                                "sudo easy_install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz\n",
+								"sudo mkdir /quali\n",
+								"sudo mkdir /quali/artifacts\n",
+								"cd /quali\n",
+								"sudo mkdir devbox\n",
+								"sudo mkdir devbox/devbox-server\n",
+								"sudo mkdir devbox/devbox-cloud-providers\n",
+                                "cfn-init -s ",
+                                {
+                                    "Ref": "AWS::StackName"
+                                },
+                                " -r DevBoxAPIInstance",
+                                " --region ",
+                                {
+                                    "Ref": "AWS::Region"
+                                },
+                                " --configset testing\n",
+								"sudo tar -xvf /quali/artifacts/devbox-server.tar.gz -C /quali/devbox/devbox-server\n",
+								"sudo tar -xvf /quali/artifacts/devbox-cloud-providers.tar.gz -C /quali/devbox/devbox-cloud-providers\n",
+								"cd devbox/devbox-cloud-providers\n",
+								"sudo pip3 install -r requirements.txt \n",
+								"cd ..\n",
+								"cd devbox-server\n",
+								"sudo su -\n",
+								"systemctl enable devbox.service\n",
+								"systemctl start devbox.service\n",
+								"exit 0\n"
+                            ]
+                        ]
+                    }
+                }
+            },
+            "Type": "AWS::EC2::Instance"
+        },
+        "InstanceProfile":{
+            "Type":"AWS::IAM::InstanceProfile",
+            "Properties":{
+                "Path":"/",
+                "Roles":[
+                {
+                    "Ref":"InstanceRole"
+                }]
+            }
+        },
+        "InternetGateway": {
+            "Properties": {
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "internet-gateway"
+                                ]
+                            ]
+                        }
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::InternetGateway"
+        },
+        "InternetGatewayAttachment": {
+            "Properties": {
+                "InternetGatewayId": {
+                    "Ref": "InternetGateway"
+                },
+                "VpcId": {
+                    "Ref": "vpc"
+                }
+            },
+            "Type": "AWS::EC2::VPCGatewayAttachment"
+        },
+        "PublicRouteTable": {
+            "Properties": {
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "-",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "public-rt"
+                                ]
+                            ]
+                        }
+                    }
+                ],
+                "VpcId": {
+                    "Ref": "vpc"
+                }
+            },
+            "Type": "AWS::EC2::RouteTable"
+        },
+        "PublicSubnet": {
+            "Properties": {
+                "CidrBlock": "10.0.0.0/24",
+                "MapPublicIpOnLaunch": "true",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "public-subnet"
+                                ]
+                            ]
+                        }
+                    }
+                ],
+                "VpcId": {
+                    "Ref": "vpc"
+                }
+            },
+            "Type": "AWS::EC2::Subnet"
+        },
+        "PublicSubnetARouteTable": {
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PublicRouteTable"
+                },
+                "SubnetId": {
+                    "Ref": "PublicSubnet"
+                }
+            },
+            "Type": "AWS::EC2::SubnetRouteTableAssociation"
+        },
+        "RouteToInternet": {
+            "DependsOn": "InternetGatewayAttachment",
+            "Properties": {
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "GatewayId": {
+                    "Ref": "InternetGateway"
+                },
+                "RouteTableId": {
+                    "Ref": "PublicRouteTable"
+                }
+            },
+            "Type": "AWS::EC2::Route"
+        },
+        "SecurityGroup": {
+            "Properties": {
+                "GroupDescription": "devbox security group",
+                "SecurityGroupIngress": [
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "FromPort": "22",
+                        "IpProtocol": "tcp",
+                        "ToPort": "22"
+                    },
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "FromPort": {
+                            "Ref": "DevboxAPIPort"
+                        },
+                        "IpProtocol": "tcp",
+                        "ToPort": {
+                            "Ref": "DevboxAPIPort"
+                        }
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "security-group"
+                                ]
+                            ]
+                        }
+                    }
+                ],
+                "VpcId": {
+                    "Ref": "vpc"
+                }
+            },
+            "Type": "AWS::EC2::SecurityGroup"
+        },
+        "vpc": {
+            "Properties": {
+                "CidrBlock": "10.0.0.0/24",
+                "EnableDnsHostnames": "true",
+                "EnableDnsSupport": "true",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "vpc"
+                                ]
+                            ]
+                        }
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::VPC"
+        }
+    }
+}
