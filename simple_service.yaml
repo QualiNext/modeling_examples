@@ -1,15 +1,16 @@
-dev-box:
-    kind: service
-    network:
-        external: [5050]
-    deployment_defaults:
-        new:
-            image:
-                kube_test: ubunutu-16.01
-                aws_stage: ami-crap
-    configuration:
-        run_script: 
-                kube_test: x.sh
-                aws_stage: crap.sh
+---
+kind: service
+name: devbox
+network:
+    external: [5050]
+deployment_defaults:
+    new:
+        image:
+            kube_test: ubunutu-16.01
+            aws_stage: ami-crap
+configuration:
+    run_script: 
+            kube_test: x.sh
+            aws_stage: crap.sh
 
 
