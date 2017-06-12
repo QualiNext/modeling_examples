@@ -1,5 +1,5 @@
 ---
-kind: service
+kind: application
 name: devbox
 network:
     external: [5050]
@@ -7,10 +7,10 @@ deployment_defaults:
     new:
         image:
             kube_test: ubunutu-16.01
-            aws_stage: ami-crap
+            aws_stage: amixx
 configuration:
     run_script: 
-            kube_test: x.sh
-            aws_stage: crap.sh
+            kube_test: config_kube.sh
+            aws_stage: config_aws.sh
 
 
