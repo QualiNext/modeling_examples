@@ -1,0 +1,15 @@
+
+name: team-server-integration-tests
+kind: blueprint
+environment_type: sandbox
+cloud:
+    name: aws_testing
+    template: test.template
+services:
+    - name: team_server
+      deployment: 
+        template: multi_node
+
+    - name: portal
+        deployment:
+            template: multi_node

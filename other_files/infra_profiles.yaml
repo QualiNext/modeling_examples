@@ -1,0 +1,15 @@
+name: low_end_requirements
+kind: infra_profile
+minRam: 8192mb
+minCores: 2
+storage:
+    - mount: '/dsfd'
+      volume: volume1
+volumes:
+    - name: volume1
+      minDisk: 100gb
+      minDiskType: ssd
+      persistentDisk: true
+      metadata:
+          selector: slow
+    - name: volume2

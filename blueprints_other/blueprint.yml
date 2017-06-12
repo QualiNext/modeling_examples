@@ -1,0 +1,55 @@
+
+name: team-server-post-build
+kind: blueprint
+environment-type: sandbox
+cloud: kube_test
+defaults:
+    service.deployment.template: low_end_requirements
+services:
+    - name: team_server
+    - name: portal
+    - name: api_server
+---
+name: teamserver-aws-all-in-one
+kind: blueprint
+environment_type: sandbox
+profiles:
+    post-build-tests:
+        deployment_targets:
+            - name: all_in_one_server
+              kind: new_deployment
+              template: low_end_requirements
+        environment_type: sandbox
+        services:
+            - mame: team_server
+              deployment: all_in_one_server
+            - name: portal
+              deployment: all_in_one_server
+            - name: api_server
+              deployment: all_in_one_server
+---
+name: production
+kind: blueprint
+environment_type: always_on
+deployments:
+    - name: main_server_prod_deployment
+      kind: existing_deployment
+      selector: main_server
+    - name: main_portal_prod_deployment
+      kind: existing_deployment
+      selector: portal
+    - name: main_api_prod_deployment
+      kind: existing_deployment
+      selector: api
+defaults:
+    upgrade_strategy: in-place
+services:
+    - team_server:
+        deployment: main_server_prod_deployment
+    - portal:
+        deployment: main_portal_prod_deployment
+    - api_server:
+        deployment: main_api_prod_deployment
+
+
+
