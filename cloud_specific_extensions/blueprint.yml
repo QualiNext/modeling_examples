@@ -5,7 +5,7 @@ environment_type: sandbox
 cloud:
     name: aws_testing
     template: test.template
-services:
+applications:
     - name: team_server
       deployment: 
         template: multi_node

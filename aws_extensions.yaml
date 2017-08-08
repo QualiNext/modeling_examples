@@ -1,0 +1,55 @@
+service:
+    tag: server
+kind: blueprint_extension
+name: S3_Access
+custom_properties:
+    metadata:
+        AWS::CloudFormation::Authentication:
+            S3AccessCreds: 
+                type: S3,
+                buckets: [ "ngdevbox" ]
+                roleName: 
+                    Ref: InstanceRole
+---
+name: team-server-aws-instances
+service: team_server
+kind:  blueprint_extension
+custom_properties:
+    metadata:
+        AWS::CloudFormation::Authentication:
+            S3AccessCreds: 
+                type: S3,
+                buckets: [ "ngdevbox" ]
+                roleName: 
+                    Ref: InstanceRole
+                
+    properties:
+        IamInstanceProfile: 
+            ref: InstanceProfile
+        SecurityGroupIds:
+            - ref: SecurityGroup
+        SubnetId:
+            ref: PublicSubnet
+
+
+
+Simple Infra
+App centric     Simple infra + reference existing            Complex Infra
+-----------                                                 -------------
+blueprint            blueprint +  id                       blueprint <--> CF 
+
+3.a - customer brings a CF its not connected to the blueprint 
+3.b - customer brings a CF 
+
+CF                 CF
+ -> Infra           -> Infra + App
+ -> App
+
+Immediate feedback/value from CloudShell:
+    1. (not include in MVP) Launch his CF - Accessible as self service, we'll add tags, auto-end, api
+    2. Sample Repo with Apps of different techs 
+
+Learn CloudShell Modeling and Create a blueprint:
+    1. Manual/CI - Create a simple blueprint with your own application
+      (running on a default sandbox infra)
+    2. Push to production - Export/use my production CF / Learn to create a CF file to supplement the blueprint

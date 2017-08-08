@@ -1,0 +1,54 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely edit after that. If you find
+# yourself editing this file very often, consider using Jekyll's data files
+# feature for the data you need to update frequently.
+#
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
+
+# Site settings
+# These are used to personalize your new site. If you look in the HTML files,
+# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
+# You can create any custom variable you would like, and they will be accessible
+# in the templates via {{ site.myvariable }}.
+title: CloudShell Modeling Guide
+email: roni.d@quali.com
+description: > # this means to ignore newlines until "baseurl:"
+  CloudShell makes it easy to create end-to-end standard blueprints from the app to
+  the underlying infrastrucutre. Blueprints created via CloudShell are easily
+  deployable to multiple clouds containers/vms making them ideal as single
+  sourced asset for both dev/test sandboxing and production usage.
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site, e.g. http://example.com
+twitter_username: jekyllrb
+github_username:  jekyll
+navigation: 1
+collections:
+    applications:
+        output: true
+        title: "Applications"
+        display-order: 0
+# Build settings
+markdown: kramdown
+
+
+theme: minima
+gems:
+  - jekyll-feed
+  - jekyll_github_sample
+exclude:
+  - Gemfile
+  - Gemfile.lock
+redcarpet:
+    extensions: [
+        'no_intra_emphasis',
+        'fenced_code_blocks',
+        'autolink',
+        'strikethrough',
+        'superscript',
+        'with_toc_data',
+        'tables',
+        'hardwrap'
+    ]

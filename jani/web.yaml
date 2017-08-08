@@ -1,0 +1,29 @@
+kind: application
+name: web
+spec:
+  type: m4.xlarge
+source:
+  os: ubuntu1404
+network:
+  hostname: web
+  ports:
+    internal:
+      - 80
+      - 443
+    external:
+      - 80
+      - 443
+  subnet: public
+disks:
+  - name: vol1
+    type: new
+    path: /data/web
+tags:
+  - env: dev
+  - tier: frontend
+  - stack: lamp
+scripts:
+  - init: web_setup.sh
+dependency:
+  - db
+  - cache

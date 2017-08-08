@@ -1,0 +1,22 @@
+---
+layout: default
+---
+
+<div class="page-header" data-page-id="{{ page.path }}">
+    <h2>{{ page.title }}
+        {% if page.subtitle %}<small>{{ page.subtitle }}</small>{% endif %}
+    </h2>
+</div>
+
+{{ content }}
+
+<script>
+$(function() {
+    page = $(".page-header").attr("data-page-id")
+    nav_item = $(".nav li[data-page-id='"+page+"']")
+    if (nav_item) {
+        $(".nav").find(".active").removeClass("active");
+        nav_item.addClass("active");
+    }
+})
+</script>

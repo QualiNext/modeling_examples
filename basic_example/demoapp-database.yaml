@@ -1,0 +1,23 @@
+---
+kind: application
+name: demoapp-api
+spec: standard_with_persistent_storage
+network:
+  internal: [3001]
+  external: [22]
+source:
+  image: standard_centos_7
+configuration:
+    postScrips:
+    - cloud: aws-staging
+      script: demoapp-api-aws.sh
+    - cloud: kubernetes-testing
+      script: demoapp-api.sh
+tags:
+  - env: dev
+  - tier: backend
+  - stack: lamp
+scripts:
+  - configuration: setup_app.sh
+  - healthcheck: verify.sh
+  - cleanup: db_export.sh
