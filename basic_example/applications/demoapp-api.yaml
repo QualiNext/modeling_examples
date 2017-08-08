@@ -1,19 +1,27 @@
 ---
 kind: application
-name: demoapp-api
-spec:
-  default: low_end_linux_machine
-network:
-  internal: [3001]
-source:
+
+metadata:
+  name: demoapp-api
+  tags:
+    - env: dev
+    - tier: backend
+    - stack: lamp
+
+infrastructure:
+  spec:
+    default: low_end_linux_machine
+  network:
+    internal: [3001]
+    external: [80, 8080]
+
+application:
   image: standard_centos_7
   artifacts:
     identifier: app-api
-tags:
-  - env: dev
-  - tier: backend
-  - stack: lamp
-lifecycle:
-  - setup: setup_app.sh
-  - healthcheck: verify.sh
-  - cleanup: db_export.sh
+    
+orchestration:
+  lifecycle:
+    - setup: setup_app.sh
+    - healthcheck: verify.sh
+    - cleanup: db_export.sh
