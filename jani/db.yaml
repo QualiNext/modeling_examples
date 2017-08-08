@@ -1,0 +1,27 @@
+kind: service
+name: db
+spec:
+  cpu: 4
+  memory: 4gb
+source:
+  image: ami-1515f67c
+network:
+  hostname: db
+  ports:
+    internal:
+      - 3306
+    external:
+      - 80
+disks:
+  - name: vol1
+    type: existing
+    id: vol-049df61146c4d7901
+    path: /data
+tags:
+  - env: dev
+  - tier: backend
+  - stack: lamp
+scripts:
+  - configuration: mysql_dump.sh
+  - healthcheck: verify.sh
+  - cleanup: db_export.sh

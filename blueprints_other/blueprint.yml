@@ -10,6 +10,7 @@ services:
     - name: portal
     - name: api_server
 ---
+
 name: teamserver-aws-all-in-one
 kind: blueprint
 environment_type: sandbox
@@ -20,13 +21,15 @@ profiles:
               kind: new_deployment
               template: low_end_requirements
         environment_type: sandbox
-        services:
+        applications:
             - mame: team_server
               deployment: all_in_one_server
             - name: portal
               deployment: all_in_one_server
             - name: api_server
               deployment: all_in_one_server
+
+
 ---
 name: production
 kind: blueprint

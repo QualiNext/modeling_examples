@@ -1,0 +1,21 @@
+kind: service
+name: cache
+spec:
+  cpu: 2
+  memory: 8gb
+source:
+  os: centos7
+network:
+  hostname: cache
+  ports:
+    internal:
+      - 11211
+  subnet: private
+tags:
+  - env: dev
+  - tier: backend
+  - stack: lamp
+scripts:
+  - init: setup_memcache.sh
+dependency:
+  - db

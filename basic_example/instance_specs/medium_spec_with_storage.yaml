@@ -1,9 +1,10 @@
 ---
-name: low_end_requirements
-kind: infra_profile
-spec:
+name: low_end_linux_machine
+kind: instance_spec
+image: standard_centos_7
+resources:
   - cloud: aws
-    instance_type: xxxx
+    instance_type: t2.micro
   - cloud: kubernetes
     cpu_units: x
     RAM: x

@@ -1,0 +1,19 @@
+kind: blueprint
+deployment:
+  target: aws
+  zone: us-east
+  vpc: dev_vpc
+environment:
+  sandbox:
+    starttime: 2005-10-30 T 10:45 UTC
+    duration: 12:30
+applications:
+  - db
+  - cache
+  - web:
+      instances: 4
+tags:
+  - env: dev
+  - stack: lamp
+
+
