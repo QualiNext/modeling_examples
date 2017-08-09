@@ -26,10 +26,14 @@ twitter_username: jekyllrb
 github_username:  jekyll
 navigation: 1
 collections:
+    infra_spec:
+      output: true
+      title: "Infrastructure Spec"
+      display-order: 0
     applications:
         output: true
         title: "Applications"
-        display-order: 0
+        display-order: 1
 # Build settings
 markdown: kramdown
 highlighter: pygments

@@ -1,10 +1,10 @@
 ---
-name: low_end_linux_machine
+name: low_end_instance
 kind: instance_spec
-source: standard_centos_7
-resources:
+compute:
   - cloud: aws
     instance_type: t2.micro
   - cloud: kubernetes
-    cpu_units: x
-    RAM: x
+    resources:
+      cpu: "250m"
+      memory: "128Mi"
