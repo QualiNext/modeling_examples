@@ -1,7 +1,7 @@
 ---
-[START pre]
+#[START pre]
 kind: application
-[END pre]
+#[END pre]
 #[START metadata]
 metadata:
   name: demoapp-api
