@@ -9,5 +9,5 @@ Defining infrastructure spec is a good way to
 @column
 {% highlight yaml %}
 # infra-spec.yaml
-{% github_sample /QualiNext/modeling_examples/master/basic_example/applications/demoapp-api.yaml tag:pre %}
+{% github_sample /QualiNext/modeling_examples/master/basic_example/instance_specs/low_end_linux_machine.yaml tag:pre %}
 {% endhighlight %}
