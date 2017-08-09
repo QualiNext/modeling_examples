@@ -10,7 +10,7 @@ CS2k18 Applications are modeled using simple YAML files.
 @column
 {% highlight yaml %}
 # my-application.yaml
-{% github_sample /QualiNext/modeling_examples/master/basic_example/applications/demoapp-api.yaml tag:metadata %}
+{% github_sample /QualiNext/modeling_examples/master/basic_example/applications/demoapp-api.yaml tag:pre %}
 {% endhighlight %}
 
 @row
@@ -22,7 +22,7 @@ running this application
 
 @column
 {% highlight yaml %}
-{% github_sample /QualiNext/modeling_examples/master/basic_example/applications/demoapp-api.yaml 3 9 %}
+{% github_sample /QualiNext/modeling_examples/master/basic_example/applications/demoapp-api.yaml tag:metadata %}
 {% endhighlight %}
 
 @row
@@ -38,7 +38,7 @@ sandbox.
 
 @column
 {% highlight YAML %}
-{% github_sample /QualiNext/modeling_examples/master/basic_example/applications/demoapp-api.yaml 10 15 %}
+{% github_sample /QualiNext/modeling_examples/master/basic_example/applications/demoapp-api.yaml tag:infrastructure %}
 {% endhighlight %}
 
 @row
@@ -50,7 +50,7 @@ running this application.
 
 @column
 {% highlight YAML %}
-{% github_sample /QualiNext/modeling_examples/master/basic_example/applications/demoapp-api.yaml 16 20 %}
+{% github_sample /QualiNext/modeling_examples/master/basic_example/applications/demoapp-api.yaml tag:application %}
 {% endhighlight %}
 
 @row
@@ -65,5 +65,5 @@ applications and how its identified.
 
 @column
 {% highlight YAML %}
-{% github_sample /QualiNext/modeling_examples/master/basic_example/applications/demoapp-api.yaml 21 26 %}
+{% github_sample /QualiNext/modeling_examples/master/basic_example/applications/demoapp-api.yaml tag:orchestration %}
 {% endhighlight %}
