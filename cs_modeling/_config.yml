@@ -32,12 +32,13 @@ collections:
         display-order: 0
 # Build settings
 markdown: kramdown
-
-
+highlighter: pygments
 theme: minima
+
 gems:
   - jekyll-feed
   - jekyll_github_sample
+  - pygments.rb
 exclude:
   - Gemfile
   - Gemfile.lock
