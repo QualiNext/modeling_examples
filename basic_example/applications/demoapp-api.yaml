@@ -10,21 +10,24 @@ metadata:
     - tier: backend
     - stack: lamp
 #[END metadata]
-
+#[START infrastructure]
 infrastructure:
   spec:
     default: low_end_linux_machine
   connectivity:
     internal: [3001]
     external: [80, 8080]
-
+#[END infrastructure]
+#[START application]
 application:
   image: standard_centos_7
   artifacts:
     identifier: app-api
-
+#[END application]
+#[START orchestration]
 orchestration:
   lifecycle:
     - setup: setup_app.sh
     - healthcheck: verify.sh
     - cleanup: db_export.sh
+#[END orchestration]
