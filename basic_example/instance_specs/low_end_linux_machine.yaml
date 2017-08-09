@@ -1,6 +1,8 @@
 ---
+#[START pre]
 name: low_end_instance
 kind: instance_spec
+#[END pre]
 compute:
   - cloud: aws
     instance_type: t2.micro
