@@ -10,7 +10,7 @@ CS2k18 Applications are modeled using simple YAML files.
 @column
 {% highlight yaml %}
 # my-application.yaml
-{% github_sample /QualiNext/modeling_examples/master/basic_example/applications/demoapp-api.yaml 0 2 %}
+{% github_sample /QualiNext/modeling_examples/master/basic_example/applications/demoapp-api.yaml tag:metadata %}
 {% endhighlight %}
 
 @row
@@ -32,18 +32,13 @@ requirements of the app. These can later be overridden when the app
 is used inside a blueprint.
 - **spec**: The application spec describes its infrastructure requirements.
 This can have a different meaning in different clouds.
-- **network**: The ports which the app requires and that are required to
+- **connectivity**: The ports which the app requires and that are required t
 interact with it. By default, ports can be assigned as external ports, which are available from the sandbox, or internal - available to other apps inside the
 sandbox.
 
 @column
 {% highlight YAML %}
-infrastructure:
-  spec:
-    default: low_end_linux_machine
-  network:
-    internal: [3001]
-    external: [80, 8080]
+{% github_sample /QualiNext/modeling_examples/master/basic_example/applications/demoapp-api.yaml 10 15 %}
 {% endhighlight %}
 
 @row
@@ -55,10 +50,7 @@ running this application.
 
 @column
 {% highlight YAML %}
-application:
-  image: standard_centos_7
-  artifacts:
-    identifier: app-api
+{% github_sample /QualiNext/modeling_examples/master/basic_example/applications/demoapp-api.yaml 16 20 %}
 {% endhighlight %}
 
 @row
@@ -73,9 +65,5 @@ applications and how its identified.
 
 @column
 {% highlight YAML %}
-orchestration:
-  lifecycle:
-    - setup: setup_app.sh
-    - healthcheck: verify.sh
-    - cleanup: db_export.sh
+{% github_sample /QualiNext/modeling_examples/master/basic_example/applications/demoapp-api.yaml 21 26 %}
 {% endhighlight %}

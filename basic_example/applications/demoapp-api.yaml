@@ -1,12 +1,13 @@
 ---
 kind: application
-
+#[START #metadata]
 metadata:
   name: demoapp-api
   tags:
     - env: dev
     - tier: backend
     - stack: lamp
+#[END #metadata]
 
 infrastructure:
   spec:
