@@ -11,3 +11,10 @@ Defining infrastructure spec is a good way to
 # infra-spec.yaml
 {% github_sample /QualiNext/modeling_examples/master/basic_example/instance_specs/low_end_linux_machine.yaml tag:pre %}
 {% endhighlight %}
+
+@row
+@column
+{% highlight yaml %}
+# infra-spec.yaml
+{% github_sample /QualiNext/modeling_examples/master/basic_example/instance_specs/low_end_linux_machine.yaml tag:metadata %}
+{% endhighlight %}
