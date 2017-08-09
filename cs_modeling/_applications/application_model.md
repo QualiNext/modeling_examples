@@ -10,7 +10,7 @@ CS2k18 Applications are modeled using simple YAML files.
 @column
 {% highlight yaml %}
 # my-application.yaml
-{% github_sample /QualiNext/modeling_examples/master/basic_example/applications/demoapp-api.yaml tag:pre %}
+{% github_sample /QualiNext/modeling_examples/master/basic_example/applications/demoapp-api.yaml tag:metadata 4%}
 {% endhighlight %}
 
 @row
