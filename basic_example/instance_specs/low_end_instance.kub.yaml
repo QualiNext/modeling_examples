@@ -8,6 +8,7 @@ metadata:
   cloud: kubernetes
 #[END metadata]
 #[START compute]
+#Container compute requirements
 compute:
   resources:
     cpu: "250m"

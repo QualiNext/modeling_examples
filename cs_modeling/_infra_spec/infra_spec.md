@@ -35,7 +35,7 @@ running this application.
 
 @column
 {% highlight yaml %}
-{% github_sample /QualiNext/modeling_examples/master/basic_example/instance_specs/low_end_instance.aws.yaml tag:compute %}
+{% github_sample /QualiNext/modeling_examples/master/basic_example/instance_specs/low_end_instance.kub.yaml tag:compute %}
 {% endhighlight %}
 
 @row

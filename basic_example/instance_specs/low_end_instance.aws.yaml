@@ -8,6 +8,7 @@ metadata:
   cloud: aws
 #[END metadata]
 #[START compute]
+#EC2 compute type
 compute:
     instance_type: t2.micro
 #[END compute]
