@@ -18,7 +18,6 @@ be assigned to each app instance, whether a VM or a container.
 
 @row
 ##### metadata
-The application section defines the basic artifacts or image to use for the app.
 - **name**: The name identifying this instance spec. This
 can be referenced in the application.yaml _infrastructure_
 section.
@@ -31,8 +30,16 @@ Possible options are _aws_ | _kubernetes_.
 {% endhighlight %}
 
 @column
+{% highlight yaml %}
+{% github_sample /QualiNext/modeling_examples/master/basic_example/instance_specs/low_end_instance.kub.yaml tag:metadata %}
+{% endhighlight %}
 
 @row
+##### compute
+- **ec2.instance_type**: Supported in EC2 clouds, specifies the instance type to use in EC2
+- **kub.resources**: Supported in Kubernetes. Specify the RAM/CPU requirement and limits of each
+container created for this app. This includes memory and RAM requirements. To set these values, use the same syntax as specified by the Kubernetes API as described [here](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/).
+
 @column
 {% highlight yaml %}
 {% github_sample /QualiNext/modeling_examples/master/basic_example/instance_specs/low_end_instance.aws.yaml tag:compute %}
@@ -50,3 +57,6 @@ Possible options are _aws_ | _kubernetes_.
 {% endhighlight %}
 
 @column
+{% highlight yaml %}
+{% github_sample /QualiNext/modeling_examples/master/basic_example/instance_specs/low_end_instance.kub.yaml tag:storage %}
+{% endhighlight %}

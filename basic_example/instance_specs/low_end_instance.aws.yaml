@@ -10,12 +10,12 @@ metadata:
 #[START compute]
 #EC2 compute type
 compute:
-    instance_type: t2.micro
+    ec2.instance_type: t2.micro
 #[END compute]
 #[START storage]
 storage:
   - mount: '/dsfd'
     size: 100gb
     persistent: true
-    disk_type: ssd
+    ec2.disk_type: ssd
 #[END storage]
