@@ -4,7 +4,9 @@ title: Infrastructure spec
 date: "2016-04-30 13:02:32 +0300"
 order: 7
 ---
-Defining infrastructure spec is a good way to
+Instance specs defines rules on the infrastructure to
+be assigned to each app instance, whether a VM or a container.
+
 @row
 @column
 {% highlight yaml %}
@@ -15,11 +17,14 @@ Defining infrastructure spec is a good way to
 @column
 
 @row
-#### metadata
+##### metadata
 The application section defines the basic artifacts or image to use for the app.
-- **name**: Use this field to specify an image which should be used as a baseline for this application.
-- **cloud**: A list of tag names and tag values that will be assigned to instances
-running this application.
+- **name**: The name identifying this instance spec. This
+can be referenced in the application.yaml _infrastructure_
+section.
+- **cloud**: The type of cloud this spec is relevant to
+Possible options are _aws_ | _kubernetes_.
+
 @column
 {% highlight yaml %}
 {% github_sample /QualiNext/modeling_examples/master/basic_example/instance_specs/low_end_instance.aws.yaml tag:metadata %}
