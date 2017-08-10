@@ -1,0 +1,23 @@
+---
+#[START pre]
+kind: instance_spec
+#[END pre]
+#[START metadata]
+metadata:
+  name: low_end_instance
+  cloud: kubernetes
+#[END metadata]
+#[START compute]
+compute:
+  resources:
+    cpu: "250m"
+    memory: "128Mi"
+#[END compute]
+#[START storage]
+storage:
+  - name: volume1
+    mount: '/dsfd'
+    size: 100gb
+    persistent: true
+    type: ssd
+#[END storage]

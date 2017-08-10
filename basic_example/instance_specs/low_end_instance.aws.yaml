@@ -1,0 +1,20 @@
+---
+#[START pre]
+kind: instance_spec
+#[END pre]
+#[START metadata]
+metadata:
+  name: low_end_instance
+  cloud: aws
+#[END metadata]
+#[START compute]
+compute:
+    instance_type: t2.micro
+#[END compute]
+#[START storage]
+storage:
+  - mount: '/dsfd'
+    size: 100gb
+    persistent: true
+    disk_type: ssd
+#[END storage]
