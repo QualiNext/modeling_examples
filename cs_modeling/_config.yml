@@ -29,11 +29,15 @@ collections:
     infra_spec:
       output: true
       title: "Infrastructure Spec"
-      display-order: 0
+      display-order: 2
     applications:
         output: true
         title: "Applications"
         display-order: 1
+    blueprints:
+        output: true
+        title: "Blueprints"
+        display-order: 0
 # Build settings
 markdown: kramdown
 highlighter: pygments

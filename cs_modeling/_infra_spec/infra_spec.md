@@ -10,11 +10,15 @@ be assigned to each app instance, whether a VM or a container.
 @row
 @column
 {% highlight yaml %}
-# infra-spec.yaml
+# sample-aws-instance-spec.yaml
 {% github_sample /QualiNext/modeling_examples/master/basic_example/instance_specs/low_end_instance.aws.yaml tag:pre %}
 {% endhighlight %}
 
 @column
+{% highlight yaml %}
+# sample-kubernetes-instance-spec.yaml
+{% github_sample /QualiNext/modeling_examples/master/basic_example/instance_specs/low_end_instance.kub.yaml tag:pre %}
+{% endhighlight %}
 
 @row
 ##### metadata
@@ -51,6 +55,16 @@ container created for this app. This includes memory and RAM requirements. To se
 {% endhighlight %}
 
 @row
+##### storage
+- **mount**: The storage will be mounted under the specified
+path in the VM/container.
+- **size**: The size of the storage to allocate.
+- **persistent**: Whether to use persistent storage
+- **ebs.volume_type**: Whether to use SSD for the instance
+- **kub.storage_selector**: Storage class selector for Kubernetes
+
+
+
 @column
 {% highlight yaml %}
 {% github_sample /QualiNext/modeling_examples/master/basic_example/instance_specs/low_end_instance.aws.yaml tag:storage %}

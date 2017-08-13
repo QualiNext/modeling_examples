@@ -1,0 +1,7 @@
+---
+kind: blueprint
+name: demoapp_webtests
+cloud: kubernetes-testing   
+applications:
+  - demoapp-api
+  - demoapp-client
