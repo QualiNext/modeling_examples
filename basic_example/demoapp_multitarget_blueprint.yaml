@@ -10,11 +10,16 @@ metadata:
     - test_stage: integration
 #[END metadata]
 #[START targets]
-targets:
+infrastructure:
   cloud: kubernetes-testing
+  targets:
+    - name: all-in-one
+      spec: low_end_linux_machine
+
 #[END targets]
 #[START applications]
 applications:
-  - demoapp-api
+  - name: demoapp-api
+    target: all-in-one
   - demoapp-client
 #[END applications]

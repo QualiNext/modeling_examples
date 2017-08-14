@@ -1,0 +1,21 @@
+---
+name: low_end_linux_machine
+kind: instance_spec
+image: standard_centos_7
+resources:
+  - cloud: aws
+    instance_type: t2.micro
+  - cloud: kubernetes
+    cpu_units: x
+    RAM: x
+storage:
+    - mount: '/dsfd'
+      volume: volume1
+volumes:
+    - name: volume1
+      minDisk: 100gb
+      minDiskType: ssd
+      persistentDisk: true
+      metadata:
+          selector: slow
+    - name: volume2
