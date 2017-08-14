@@ -13,15 +13,14 @@ metadata:
 infra:
   cloud: aws-testing
   region: us-east1
-  targets:
-    - name: all-in-one
-      spec: low_end_linux_machine
 
 #[END targets]
 #[START applications]
 applications:
   - name: demoapp-api
-    target: all-in-one
+    target:
+      type: multi-target
+      quantity: 5
   - name: demoapp-client
     target: all-in-one
 

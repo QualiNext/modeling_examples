@@ -26,9 +26,9 @@ twitter_username: jekyllrb
 github_username:  jekyll
 navigation: 1
 collections:
-    infra_spec:
+    target_spec:
       output: true
-      title: "Infrastructure Spec"
+      title: "Target Spec"
       display-order: 2
     applications:
         output: true

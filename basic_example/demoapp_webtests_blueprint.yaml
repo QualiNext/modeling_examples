@@ -10,7 +10,7 @@ metadata:
     - test_stage: integration
 #[END metadata]
 #[START targets]
-targets:
+infra:
   cloud: kubernetes-testing
 #[END targets]
 #[START applications]

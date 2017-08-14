@@ -1,6 +1,6 @@
 ---
 #[START pre]
-kind: instance_spec
+kind: target_spec
 #[END pre]
 #[START metadata]
 metadata:
