@@ -10,19 +10,29 @@ metadata:
     - test_stage: integration
 #[END metadata]
 #[START targets]
-infra:
-  cloud: aws-testing
-  region: us-east1
-  targets:
-    - name: all-in-one
-      spec: low_end_linux_machine
-
+cloud: aws-testing
+region: us-east1
 #[END targets]
 #[START applications]
-applications:
-  - name: demoapp-api
-    target: all-in-one
-  - name: demoapp-client
-    target: all-in-one
+all-in-one-vm:
+    type: ec2.instance
+    spec: low_end_linux_machine
+    applications:
+        - demoapp-api
+        - demoapp-client
+
+api-cluster:
+    type: ec2.instance.group
+    name: all-in-one
+    instances: 5
+    spec: low_end_linux_machine
+    applications:
+        - demoapp-api
+
+demoapp-api:
+    type: ec2.instance
+    applications:
+        - name: demoapp-api
+          target: all-in-one
 
 #[END applications]
