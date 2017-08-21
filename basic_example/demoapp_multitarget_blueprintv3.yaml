@@ -13,16 +13,24 @@ metadata:
 #[END metadata]
 #[START targets]
 infra:
-  cloud: kubernetes-testing
+  cloud: aws-testing
+  region: us-east1
+  targets:
+    - all-in-one: low_end_linux_machine
+
 #[END targets]
 #[START applications]
 applications:
-  - name: demoapp-api
-    target:
-      type: single_instance
-      spec: default
-  - name: demoapp-client
-    target:
-      type: single_instance
-      spec: default
+  demoapp-api:
+    target: all-in-one
+  demoapp-client:
+    target: all-in-one
+    artifacts:
+      build: 1.2.*
+  database:
+    instances: 5
+  api_backend:
+
+
+
 #[END applications]

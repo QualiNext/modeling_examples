@@ -6,6 +6,8 @@ kind: blueprint
 #[START metadata]
 metadata:
   name: demoapp_webtests
+  description: >
+    This blueprint is used for web testing
   tags:
     - test_stage: integration
 #[END metadata]

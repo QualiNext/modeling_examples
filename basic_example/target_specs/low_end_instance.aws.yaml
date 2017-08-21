@@ -1,6 +1,7 @@
 ---
 #[START pre]
 kind: target_spec
+type: single_instance
 #[END pre]
 #[START metadata]
 metadata:

@@ -4,7 +4,8 @@ title: Modeling a blueprint
 date: "2016-04-30 13:02:32 +0300"
 order: 7
 ---
-CS2k18 Applications are modeled using simple YAML files.
+A blueprint typically contains a collection of applications
+with additional information on how to deploy them.
 
 @row
 ##### orchestration

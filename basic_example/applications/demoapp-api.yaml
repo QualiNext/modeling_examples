@@ -12,8 +12,8 @@ metadata:
 #[END metadata]
 #[START infrastructure]
 infrastructure:
-  spec:
-    default: low_end_linux_machine
+  target:
+    spec: { aws: low_end_linux_machine, kubernetes: default }
   connectivity:
     internal: [3001]
     external: [80, 8080]
@@ -23,6 +23,7 @@ application:
   image: standard_centos_7
   artifacts:
     identifier: app-api
+    build: latest
 #[END application]
 #[START orchestration]
 orchestration:

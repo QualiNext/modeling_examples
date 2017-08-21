@@ -6,6 +6,8 @@ kind: blueprint
 #[START metadata]
 metadata:
   name: demoapp_webtests
+  description: >
+    This blueprint is used for web testing
   tags:
     - test_stage: integration
 #[END metadata]
@@ -24,5 +26,11 @@ applications:
     target: all-in-one
   - name: demoapp-client
     target: all-in-one
+    artifacts:
+      build: 1.2.*
+  - name: database
+    instances: 5
+  - api_backend
+
 
 #[END applications]
