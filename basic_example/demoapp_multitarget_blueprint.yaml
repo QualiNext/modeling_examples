@@ -6,33 +6,32 @@ kind: blueprint
 #[START metadata]
 metadata:
   name: demoapp_webtests
+  description: >
+      This blueprint is used for web testing
   tags:
     - test_stage: integration
 #[END metadata]
-#[START targets]
-cloud: aws-testing
-region: us-east1
+#[START targets
+cloud:
+  - name: aws-testing
+    region: us-east1
 #[END targets]
 #[START applications]
-all-in-one-vm:
-    type: ec2.instance
-    spec: low_end_linux_machine
-    applications:
-        - demoapp-api
-        - demoapp-client
+targets:
+  - all-in-one-vm:
+      type: ec2.instance
+      spec: low_end_linux_machine
+      applications:
+          - demoapp-api
+          - demoapp-client
 
-api-cluster:
-    type: ec2.instance.group
-    name: all-in-one
-    instances: 5
-    spec: low_end_linux_machine
-    applications:
-        - demoapp-api
+  - api-cluster:
+      type: ec2.instance.group
+      instances: 5
+      spec: low_end_linux_machine
+      applications:
+          - demoapp-api
 
-demoapp-api:
-    type: ec2.instance
-    applications:
-        - name: demoapp-api
-          target: all-in-one
+  - demoapp-api
 
 #[END applications]
