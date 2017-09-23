@@ -23,7 +23,6 @@ application:
   image: standard_centos_7
   artifacts:
     identifier: app-api
-    build: latest
 #[END application]
 #[START orchestration]
 orchestration:
