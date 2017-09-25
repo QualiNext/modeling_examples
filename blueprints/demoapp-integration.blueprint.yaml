@@ -1,0 +1,37 @@
+
+---
+#[START pre]
+# Simple blueprint example
+kind: blueprint
+#[END pre]
+#[START metadata]
+metadata:
+  name: demoapp_webtests
+  tags:
+    - test_stage: integration
+
+clouds:
+    - aws-testing : us-east1
+
+#[END metadata]
+#[START targets]
+infra:
+  compute:
+      targets:
+        - name: all-in-one-vm
+          spec: low_end_linux_machine
+#[END targets]
+#[START applications]
+applications:
+  - demoapp-api:
+      quantity: 5
+      spec: low_end_linux_machine
+
+  - demoapp-client:
+      target: all-in-one
+
+  - demoapp-dashboard:
+      target: all-in-one
+
+#[END applications]
+---
