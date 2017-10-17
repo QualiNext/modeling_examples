@@ -1,0 +1,47 @@
+#!groovy​
+import groovy.json.*
+
+def changeset
+def branch
+try {
+  pipeline {
+    agent any
+    stages {
+      stage('Checkout') {
+        steps {
+          sh 'sudo rm -rf *'
+          def scmVars = checkout scm
+          changeset = scmVars.GIT_COMMIT
+          sh "echo '${scmVars.GIT_BRANCH}' | sed 's/^origin\\///' > branch"
+          branch=readFile('branch').trim()
+        }
+      }
+      stage('Upload to Artifact Repository') {
+        steps {
+          echo "upload artifacts s3"
+          dir("web/bin") {
+            sh "aws s3 cp web.zip s3://ngdevbox/applications/web/${changeset}/web.zip"
+          }
+        }
+      }
+      stage('Running tests in Sandbox'){
+        steps{
+           def release = [:]
+          release['web'] = changeset
+          release['kong'] = changeset
+          release['cassandra'] = changeset
+          release['dashboard'] = changeset
+          cs18.blueprint("delivery-api-devtest-aws", release).doInsideSandbox{
+            echo "running tests"
+            sh "sleep 300"
+          }
+
+        }
+      }
+    }
+  }
+} catch (err)
+{
+  currentBuild.result = "FAILURE"
+  throw err
+}

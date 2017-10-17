@@ -1,0 +1,33 @@
+---
+#[START pre]
+kind: application
+#[END pre]
+#[START metadata]
+metadata:
+  name: demoapp-api
+  tags:
+    - stack: lamp
+#[END metadata]
+#[START infrastructure]
+infrastructure:
+  connectivity:
+    internal:
+      - api : 3001
+    external:
+      - web : 80
+      - dashboard: 8080
+#[END infrastructure]
+#[START source]
+source:
+  image: standard_centos_7
+
+#[END source]
+#[START configuration]
+lifecycle:
+  - initialization: setup_app.sh
+  - start:
+      command: node ./app
+  - validation:
+      wait_for_port: ALL
+  - cleanup: db_export.sh
+#[END configuration]

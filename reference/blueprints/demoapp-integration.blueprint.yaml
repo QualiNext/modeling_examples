@@ -24,14 +24,15 @@ infra:
 #[START applications]
 applications:
   - demoapp-api:
-      quantity: 5
+      instances: 5
       spec: low_end_linux_machine
-
+      
   - demoapp-client:
       target: all-in-one
 
   - demoapp-dashboard:
       target: all-in-one
-
 #[END applications]
+releases:
+  - demoapp-integration.releases.yaml
 ---

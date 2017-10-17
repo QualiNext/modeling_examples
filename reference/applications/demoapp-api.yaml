@@ -1,0 +1,57 @@
+---
+#[START pre]
+kind: application
+#[END pre]
+#[START metadata]
+metadata:
+  name: demoapp-api
+  tags:
+    - env: dev
+    - tier: backend
+    - stack: lamp
+
+inputs:
+  - api_port
+  - web_port
+  - dashboard_port
+
+#[END metadata]
+#[START infrastructure]
+infrastructure:
+  compute:
+    spec: { aws: low_end_linux_machine, kubernetes: default }
+  connectivity:
+    internal:
+      - api :
+          input: $api_port
+          default: 3001
+    external:
+      - web : $web_port
+      - dashboard: { $dashboard_port : 8080 }
+#[END infrastructure]
+#[START source]
+source:
+  image: standard_centos_7
+  repo:
+    name: dummy_api
+    branch: dev
+  artifacts:
+    folder:
+      name: $APP_NAME
+      folder:
+        name: $VERSION
+
+    identifier:
+      name: { regex: ".*app_7.[1-20]" }
+      starts_with: app1
+
+#[END source]
+#[START configuration]
+configuration:
+  - initialization: setup_app.sh
+  - start:
+      command: node ./app
+  - healthcheck:
+      wait_for_port: ALL
+  - cleanup: db_export.sh
+#[END configuration]
