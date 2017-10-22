@@ -26,12 +26,16 @@ applications:
   - demoapp-api:
       instances: 5
       spec: low_end_linux_machine
-      
+
   - demoapp-client:
       target: all-in-one
 
   - demoapp-dashboard:
       target: all-in-one
+      depends_on:
+        - demoapp-client:
+            wait_for: DEPLOYMENT|CONFIGURATION|VALIDATION|PORT|IP|NONE
+
 #[END applications]
 releases:
   - demoapp-integration.releases.yaml

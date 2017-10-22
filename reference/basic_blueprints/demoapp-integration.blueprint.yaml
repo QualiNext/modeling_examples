@@ -9,7 +9,7 @@ metadata:
   name: demoapp_webtests
   tags:
     - test_stage: integration
-    
+
 clouds:
     - aws-testing : us-east1
 
