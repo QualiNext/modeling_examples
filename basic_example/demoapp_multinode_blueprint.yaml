@@ -20,11 +20,7 @@ infra:
 #[START applications]
 applications:
   - name: demoapp-api
-    target:
-      type: multi-instance
-      instances: 5
+    instances: 5
   - name: demoapp-client
-    target:
-      type: multi-instance
-      instances: 3
+    instances: 3
 #[END applications]

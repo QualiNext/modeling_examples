@@ -16,35 +16,23 @@ clouds:
 #[END metadata]
 #[START targets]
 infra:
-  targets:
-    - name: all-in-one-vm
-      spec: low_end_linux_machine
-
+  compute:
+      targets:
+        - name: all-in-one-vm
+          spec: low_end_linux_machine
 #[END targets]
 #[START applications]
 applications:
   - demoapp-api:
-      quantity: 5
+      instances: 5
       spec: low_end_linux_machine
-
+      
   - demoapp-client:
       target: all-in-one
 
-  - demoapp-dashboard
-
+  - demoapp-dashboard:
+      target: all-in-one
 #[END applications]
----
-#RELEASE_PLAN.YAML
 releases:
-  - name: 7.0
-    tags:
-      - changeset: 3.2
-    versions:
-      - demoapp-api: 7.0
-      - demoapp-client: 1.4.2
-      - demoapp-dashboard: 1.5
-  - name: 7.1
-    versions:
-      - demoapp-api: 7.1
-      - demoapp-client: 7.2
-      - demoapp-dashboard: 7.1
+  - demoapp-integration.releases.yaml
+---

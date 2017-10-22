@@ -1,0 +1,18 @@
+---
+kind: release
+name: 7.0
+tags:
+  - changeset: 3.2
+versions:
+  - demoapp-api: 7.0
+  - demoapp-client: 1.4.2
+  - demoapp-dashboard: 1.5
+---
+kind: release
+name: 7.1
+tags:
+  - changeset: 3.2
+versions:
+  - demoapp-api: 7.0
+  - demoapp-client: 1.4.2
+  - demoapp-dashboard: 1.5

@@ -1,0 +1,22 @@
+
+---
+#[START pre]
+# Simple blueprint example
+kind: blueprint
+#[END pre]
+#[START metadata]
+metadata:
+  name: demoapp_webtests
+  tags:
+    - test_stage: integration
+    
+clouds:
+    - aws-testing : us-east1
+
+#[END targets]
+#[START applications]
+applications:
+  - demoapp-api
+  - demoapp-client
+  - demoapp-dashboard
+---
