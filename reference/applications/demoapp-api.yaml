@@ -11,7 +11,7 @@ metadata:
     - stack: lamp
 
 inputs:
-  - api_port
+  - api_port : 3000
   - web_port
   - dashboard_port
 
@@ -23,8 +23,8 @@ infrastructure:
   connectivity:
     internal:
       - api :
-          input: $api_port
-          default: 3001
+          port: $api_port
+          path: /testing
     external:
       - web : $web_port
       - dashboard: { $dashboard_port : 8080 }
