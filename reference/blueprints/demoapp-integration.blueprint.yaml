@@ -22,8 +22,9 @@ inputs:
 infra:
   compute:
       targets:
-        - name: all-in-one-vm
-          spec: low_end_linux_machine
+        - all-in-one-vm:
+            spec: low_end_linux_machine
+
 #[END targets]
 #[START applications]
 applications:
@@ -32,16 +33,18 @@ applications:
       spec: low_end_linux_machine
 
   - demoapp-client:
-      target: all-in-one
-      input_value:
+      compute:
+        target: all-in-one
+      input_values:
         - api_port : 3001
         - logging_profile: $logging_prof
 
   - demoapp-dashboard:
-      target: all-in-one
+      compute:
+        target: all-in-one
       depends_on:
         - demoapp-client:
-            wait_for: DEPLOYMENT|CONFIGURATION|VALIDATION|PORT|IP|NONE
+            wait_for: DEPLOYMENT|CONFIGURATION|VALIDATION(default)|PORT|IP|NONE
 
 #[END applications]
 releases:

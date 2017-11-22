@@ -1,0 +1,36 @@
+
+---
+#[START pre]
+# Simple blueprint example
+kind: blueprint
+#[END pre]
+#[START metadata]
+metadata:
+  alias: demoapp webtests
+  description: >
+    This blueprint is used for web testing
+  tags:
+    - test_stage: integration
+
+clouds:
+    - aws-testing : us-east1
+
+inputs:
+  - logging_pofile
+  - database_snapshot
+#[END metadata]
+
+#[START applications]
+applications:
+  - demoapp-api
+  - demoapp-client:
+      input_values:
+        - api_port : 3001
+        - logging_profile: $logging_prof
+
+  - demoapp-dashboard:
+      input_values:
+        #uses parameter if has the same name
+        - database_snapshot
+#[END applications]
+---

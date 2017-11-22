@@ -1,0 +1,42 @@
+---
+#[START pre]
+kind: application
+#[END pre]
+#[START metadata]
+metadata:
+  name: demoapp-api
+  tags:
+    - env: dev
+    - tier: backend
+    - stack: lamp
+
+#[END metadata]
+#[START infrastructure]
+infrastructure:
+  compute:
+    spec:
+      aws: low_end_linux_machine
+      kubernetes: default
+  connectivity:
+    internal:
+      - api :
+          port: $api_port
+          path: /testing
+    external:
+      - web : $web_port
+
+#[END infrastructure]
+#[START source]
+source:
+  image: standard_centos_7
+
+#[END source]
+#[START configuration]
+configuration:
+  - initialization: setup_app.sh
+  - start:
+      command: node ./app
+  - healthcheck:
+      wait_for_port: ALL
+  - cleanup: db_export.sh
+#[END configuration]

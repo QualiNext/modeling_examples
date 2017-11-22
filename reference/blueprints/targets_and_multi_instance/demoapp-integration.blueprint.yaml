@@ -1,0 +1,49 @@
+
+---
+#[START pre]
+# Simple blueprint example
+kind: blueprint
+#[END pre]
+#[START metadata]
+metadata:
+  alias: demoapp webtests
+  description: >
+    This blueprint is used for web testing
+  tags:
+    - test_stage: integration
+
+clouds:
+    - aws-testing : us-east1
+
+inputs:
+  - logging_prof
+#[END metadata]
+#[START targets]
+infra:
+  compute:
+      targets:
+        - name: all-in-one-vm
+          spec: low_end_linux_machine
+#[END targets]
+#[START applications]
+applications:
+  - demoapp-api:
+      instances: 5
+      spec: low_end_linux_machine
+
+  - demoapp-client:
+      target: all-in-one-vm
+      input_value:
+        - api_port : 3001
+        - logging_profile: $logging_prof
+
+  - demoapp-dashboard:
+      target: all-in-one-vm
+      depends_on:
+        - demoapp-client:
+            wait_for: DEPLOYMENT|CONFIGURATION|VALIDATION(default)|PORT|IP|NONE
+
+#[END applications]
+releases:
+  - demoapp-integration.releases.yaml
+---
